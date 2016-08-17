@@ -1,15 +1,14 @@
-YYModel <a href="#中文介绍">中文介绍</a>
+YYModel
 ==============
 
 [![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://raw.githubusercontent.com/ibireme/YYModel/master/LICENSE)&nbsp;
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)&nbsp;
 [![CocoaPods](http://img.shields.io/cocoapods/v/YYModel.svg?style=flat)](http://cocoapods.org/?q= YYModel)&nbsp;
 [![CocoaPods](http://img.shields.io/cocoapods/p/YYModel.svg?style=flat)](http://cocoapods.org/?q= YYModel)&nbsp;
-[![Support](https://img.shields.io/badge/support-iOS%206%2B%20-blue.svg?style=flat)](https://www.apple.com/nl/ios/)&nbsp;
 [![Build Status](https://travis-ci.org/ibireme/YYModel.svg?branch=master)](https://travis-ci.org/ibireme/YYModel)&nbsp;
 [![codecov.io](https://codecov.io/github/ibireme/YYModel/coverage.svg?branch=master)](https://codecov.io/github/ibireme/YYModel?branch=master)
 
-High performance model framework for iOS.<br/>
+High performance model framework for iOS/OSX.<br/>
 (It's a component of [YYKit](https://github.com/ibireme/YYKit))
 
 
@@ -31,7 +30,7 @@ Features
 - **Type Safe**: All data types will be verified to ensure type-safe during the conversion process.
 - **Non-intrusive**: There is no need to make the model class inherit from other base class.
 - **Lightwight**: This library contains only 5 files.
-- **Docs and unit testing**: Coverage 100%.
+- **Docs and unit testing**: 100% docs coverage, 99.6% code coverage.
 
 Usage
 ==============
@@ -212,10 +211,10 @@ You can map a json key (key path) or an array of json key (key path) to one or m
 	
 	@implementation Attributes
 	+ (NSArray *)modelPropertyBlacklist {
-	    return @{@"test1", @"test2"};
+	    return @[@"test1", @"test2"];
 	}
 	+ (NSArray *)modelPropertyWhitelist {
-	    return @{@"name"};
+	    return @[@"name"];
 	}
 	@end
 
@@ -234,7 +233,7 @@ You can map a json key (key path) or an array of json key (key path) to one or m
 	@end
 
 	@implementation User
-	- (BOOL))modelCustomTransformFromDictionary:(NSDictionary *)dic {
+	- (BOOL)modelCustomTransformFromDictionary:(NSDictionary *)dic {
 	    NSNumber *timestamp = dic[@"timestamp"];
 	    if (![timestamp isKindOfClass:[NSNumber class]]) return NO;
 	    _createdAt = [NSDate dateWithTimeIntervalSince1970:timestamp.floatValue];
@@ -247,7 +246,7 @@ You can map a json key (key path) or an array of json key (key path) to one or m
 	}
 	@end
 
-###Coding/Copying/hash/equal
+###Coding/Copying/hash/equal/description
 
 	@interface YYShadow :NSObject <NSCoding, NSCopying>
 	@property (nonatomic, copy) NSString *name;
@@ -260,6 +259,7 @@ You can map a json key (key path) or an array of json key (key path) to one or m
 	- (id)copyWithZone:(NSZone *)zone { return [self yy_modelCopy]; }
 	- (NSUInteger)hash { return [self yy_modelHash]; }
 	- (BOOL)isEqual:(id)object { return [self yy_modelIsEqual:object]; }
+	- (NSString *)description { return [self yy_modelDescription]; }
 	@end
 
 
@@ -268,7 +268,7 @@ Installation
 
 ### CocoaPods
 
-1. Add `pod "YYModel"` to your Podfile.
+1. Add `pod 'YYModel'` to your Podfile.
 2. Run `pod install` or `pod update`.
 3. Import \<YYModel/YYModel.h\>.
 
@@ -295,7 +295,7 @@ You can also install documentation locally using [appledoc](https://github.com/t
 
 Requirements
 ==============
-This library requires a deployment target of iOS 6.0 or greater.
+This library requires `iOS 6.0+` and `Xcode 7.0+`.
 
 
 License
@@ -307,7 +307,7 @@ YYModel is provided under the MIT license. See LICENSE file for details.
 ---
 中文介绍
 ==============
-高性能 iOS 模型转换框架。<br/>
+高性能 iOS/OSX 模型转换框架。<br/>
 (该项目是 [YYKit](https://github.com/ibireme/YYKit) 组件之一)
 
 
@@ -328,7 +328,7 @@ YYModel is provided under the MIT license. See LICENSE file for details.
 - **类型安全**: 转换过程中，所有的数据类型都会被检测一遍，以保证类型安全，避免崩溃问题。
 - **无侵入性**: 模型无需继承自其他基类。
 - **轻量**: 该框架只有 5 个文件 (包括.h文件)。
-- **文档和单元测试**: 覆盖率 100%。
+- **文档和单元测试**: 文档覆盖率100%, 代码覆盖率99.6%。
 
 使用方法
 ==============
@@ -513,11 +513,11 @@ EEE MMM dd HH:mm:ss Z yyyy
 	@implementation Attributes
 	// 如果实现了该方法，则处理过程中会忽略该列表内的所有属性
 	+ (NSArray *)modelPropertyBlacklist {
-	    return @{@"test1", @"test2"};
+	    return @[@"test1", @"test2"];
 	}
 	// 如果实现了该方法，则处理过程中不会处理该列表外的属性。
 	+ (NSArray *)modelPropertyWhitelist {
-	    return @{@"name"};
+	    return @[@"name"];
 	}
 	@end
 
@@ -539,7 +539,7 @@ EEE MMM dd HH:mm:ss Z yyyy
 	// 当 JSON 转为 Model 完成后，该方法会被调用。
 	// 你可以在这里对数据进行校验，如果校验不通过，可以返回 NO，则该 Model 会被忽略。
 	// 你也可以在这里做一些自动转换不能完成的工作。
-	- (BOOL))modelCustomTransformFromDictionary:(NSDictionary *)dic {
+	- (BOOL)modelCustomTransformFromDictionary:(NSDictionary *)dic {
 	    NSNumber *timestamp = dic[@"timestamp"];
 	    if (![timestamp isKindOfClass:[NSNumber class]]) return NO;
 	    _createdAt = [NSDate dateWithTimeIntervalSince1970:timestamp.floatValue];
@@ -556,7 +556,7 @@ EEE MMM dd HH:mm:ss Z yyyy
 	}
 	@end
 
-###Coding/Copying/hash/equal
+###Coding/Copying/hash/equal/description
 
 	@interface YYShadow :NSObject <NSCoding, NSCopying>
 	@property (nonatomic, copy) NSString *name;
@@ -570,6 +570,7 @@ EEE MMM dd HH:mm:ss Z yyyy
 	- (id)copyWithZone:(NSZone *)zone { return [self yy_modelCopy]; }
 	- (NSUInteger)hash { return [self yy_modelHash]; }
 	- (BOOL)isEqual:(id)object { return [self yy_modelIsEqual:object]; }
+	- (NSString *)description { return [self yy_modelDescription]; }
 	@end
 
 
@@ -578,7 +579,7 @@ EEE MMM dd HH:mm:ss Z yyyy
 
 ### CocoaPods
 
-1. 在 Podfile 中添加 `pod "YYModel"`。
+1. 在 Podfile 中添加 `pod 'YYModel'`。
 2. 执行 `pod install` 或 `pod update`。
 3. 导入 \<YYModel/YYModel.h\>。
 
@@ -602,10 +603,9 @@ EEE MMM dd HH:mm:ss Z yyyy
 你可以在 [CocoaDocs](http://cocoadocs.org/docsets/YYModel/) 查看在线 API 文档，也可以用 [appledoc](https://github.com/tomaz/appledoc) 本地生成文档。
 
 
-
 系统要求
 ==============
-该项目最低支持 iOS 6.0。
+该项目最低支持 `iOS 6.0` 和 `Xcode 7.0`。
 
 
 许可证
